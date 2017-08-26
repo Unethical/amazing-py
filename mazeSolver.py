@@ -3,22 +3,31 @@ import imageio
 import os
 import sys
 import shutil
-
+mazeFilePath = sys.argv[1]
+if not os.path.exists(mazeFilePath):
+    sys.exit("Sorry, '" + mazeFilePath + "' not found.")
 if not os.path.exists("gifdir"):
 	os.mkdir("gifdir")
 
-im = Image.open("round_maze.jpg")
-
+mazeName = mazeFilePath.partition('.')[0]
+im = Image.open(mazeFilePath)
+im = im.convert("RGB")
 os.chdir("gifdir")
 pixelMatrix = im.load()
+start = (0,0)
+end = (0,0)
+if mazeName == "large_maze":
+    start = (250, 3)
+    end = (253, 495)
 
-#for maze.jpg
-#start = (185, 0)
-#end = (395, 380)
 
-#for roundmaze.jpg
-start = (492,250)
-end = (250, 250)
+if mazeName == "maze":
+    start = (185, 0)
+    end = (395, 380)
+
+if mazeName == "round_maze":
+    start = (492,250)
+    end = (250, 250)
 boundX, boundY = im.size
 for j in range(boundY):
 	for i in range(boundX):
@@ -31,12 +40,16 @@ for j in range(boundY):
 
 def getAdjacentPixels(pixel):
 	x, y = pixel
-	top = (x, y+1)
-	bottom = (x, y-1)
+	top = (x, y-1)
+	bottom = (x, y+1)
 	left = (x-1, y)
 	right = (x+1, y)
+	top_left = (x-1, y-1)
+	top_right = (x+1, y-1)
+	bottom_left = (x-1, y+1)
+	bottom_right = (x+1, y+1)
 	
-	return [top, bottom, left, right]
+	return [top, bottom, left, right, top_left, top_right, bottom_left, bottom_right]
 images = []
 
 def getint(name):
@@ -59,7 +72,10 @@ def bfs(start, end):
 			print("maze is solved")
 			for pixel in currentPath: # draw path
 				draw = ImageDraw.Draw(im)
-				draw.point(pixel, fill=(0,200,100))
+				draw.point(pixel, fill=(238,48,167))
+				for nieghbor in getAdjacentPixels(pixel):
+				    if(nieghbor in visited):
+				        draw.point(nieghbor, fill=(238,48,167))
 			im.show() # show the glory
 			im.save(str(counter) + ".jpg")
 			imgList = os.listdir(os.getcwd())
@@ -75,7 +91,7 @@ def bfs(start, end):
 					images.append(imageio.imread(img))
 			os.chdir("..")
 			shutil.rmtree("gifdir")
-			imageio.mimsave('output.gif', images, fps=15)
+			imageio.mimsave(mazeName + '.gif', images, fps=15)
 			
 			return currentPath
 		for pixel in getAdjacentPixels(current): # get the pixels(nodes) around current
@@ -83,7 +99,7 @@ def bfs(start, end):
 			if withinBounds(pixel):
 				if pixelMatrix[pixel] == (255,255,255) and pixel not in visited:
 					visited.add(pixel) # keep track of visited
-					pixelMatrix[pixel] = (100,100,100) # color visited
+					pixelMatrix[pixel] = (201,201,255) # color visited
 					if counter % 1000 == 0:
 						im.save(str(counter) + ".jpg")
 					path_branch = list(currentPath) # brach off 
