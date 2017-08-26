@@ -1,12 +1,24 @@
-from PIL import Image, ImageDraw
-from collections import deque
+from PIL import Image, ImageDraw, ImageSequence
+import imageio
+import os
+import sys
+import shutil
 
-im = Image.open("maze.jpg")
+if not os.path.exists("gifdir"):
+	os.mkdir("gifdir")
+
+im = Image.open("round_maze.jpg")
+
+os.chdir("gifdir")
 pixelMatrix = im.load()
 
-start = (185, 0)
-end = (395, 380)
+#for maze.jpg
+#start = (185, 0)
+#end = (395, 380)
 
+#for roundmaze.jpg
+start = (492,250)
+end = (250, 250)
 boundX, boundY = im.size
 for j in range(boundY):
 	for i in range(boundX):
@@ -25,7 +37,11 @@ def getAdjacentPixels(pixel):
 	right = (x+1, y)
 	
 	return [top, bottom, left, right]
- 
+images = []
+
+def getint(name):
+	num = name.partition('.')[0]
+	return int(num)
 def withinBounds(pixel):
 	x, y = pixel
 	if(x < 0 or x >= boundX or y < 0 or y >= boundY):
@@ -35,6 +51,7 @@ def withinBounds(pixel):
 def bfs(start, end):
 	Q = [[start]] # list of paths
 	visited = set() # set of visited pixels
+	counter = 0
 	while len(Q) != 0: # while not empty
 		currentPath = Q.pop(0) # deque a path
 		current = currentPath[-1] # get last element of path
@@ -42,8 +59,24 @@ def bfs(start, end):
 			print("maze is solved")
 			for pixel in currentPath: # draw path
 				draw = ImageDraw.Draw(im)
-				draw.point(pixel, fill=255)
+				draw.point(pixel, fill=(0,200,100))
 			im.show() # show the glory
+			im.save(str(counter) + ".jpg")
+			imgList = os.listdir(os.getcwd())
+			imgList.sort(key=getint)
+			for img in imgList:
+				print(img)
+				images.append(imageio.imread(img))
+				if(img == str(counter) + ".jpg"):
+					images.append(imageio.imread(img))
+					images.append(imageio.imread(img))
+					images.append(imageio.imread(img))
+					images.append(imageio.imread(img))
+					images.append(imageio.imread(img))
+			os.chdir("..")
+			shutil.rmtree("gifdir")
+			imageio.mimsave('output.gif', images, fps=15)
+			
 			return currentPath
 		for pixel in getAdjacentPixels(current): # get the pixels(nodes) around current
 			x, y = pixel
@@ -51,10 +84,12 @@ def bfs(start, end):
 				if pixelMatrix[pixel] == (255,255,255) and pixel not in visited:
 					visited.add(pixel) # keep track of visited
 					pixelMatrix[pixel] = (100,100,100) # color visited
+					if counter % 1000 == 0:
+						im.save(str(counter) + ".jpg")
 					path_branch = list(currentPath) # brach off 
 					path_branch.append(pixel)
 					Q += [path_branch] # add new branch
-				
+		counter = counter + 1		
 bfs(start, end)
 				
 				
