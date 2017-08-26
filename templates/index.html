@@ -11,7 +11,7 @@
     <link href="../static/materialize/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 </head>
 <body>
-<nav class="light-blue lighten-1" role="navigation">
+<nav class="indigo lighten-3" role="navigation">
     <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Logo</a>
         <ul class="right hide-on-med-and-down">
             <li><a href="#">Navbar Link</a></li>
@@ -26,17 +26,35 @@
 <div class="section no-pad-bot" id="index-banner">
     <div class="container">
         <br><br>
-        <h1 class="header center orange-text">Amazing-Py</h1>
+        <h1 class="header center amber-text text-lighten-1">Amazing-Py</h1>
         <div class="row center">
             <h5 class="header col s12 light">A Python/Flask based maze solver</h5>
         </div>
+        <form>
+            <div class="file-field input-field">
+                <div class="btn amber lighten-1">
+                    <span>Upload A Maze</span>
+                    <input type="file" onchange="ReadURL(this);">
+                </div>
+                <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text">
+                </div>
+            </div>
+        </form>
         <div class="row center">
-            <button id="download-button" onclick="alert('hello');"
-               class="btn-large waves-effect waves-light orange">Upload Maze</button>
+            <img class="responsive-img" src="#" id="sourceImage">
         </div>
-        <br><br>
+        <div class="row center">
+            <button class="btn-large center-align amber lighten-1 waves-effect waves-light" type="button" name="action" onclick="alert('working on it');">
+                Go!
+            </button>
+        </div>
+
 
     </div>
+    <br><br>
+
+</div>
 </div>
 
 
@@ -77,7 +95,7 @@
     <br><br>
   </div>#}
 
-<footer class="page-footer orange">
+<footer class="page-footer indigo lighten-3">
     <div class="container">
         <div class="row">
             <div class="col l6 s12">
@@ -117,6 +135,7 @@
 <script src="../static/jquery-3.2.1.min.js"></script>
 <script src="../static/materialize/js/materialize.js"></script>
 <script src="../static/materialize/js/init.js"></script>
+<script src="../static/materialize/js/handlers.js"></script>
 
 </body>
 </html>
