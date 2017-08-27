@@ -10,6 +10,26 @@
     <link href="../static/materialize/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
     <link href="../static/materialize/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 </head>
+<style>
+
+  input[type=range]::-webkit-slider-thumb {
+    background-color: #ffca28;
+  }
+  input[type=range]::-moz-range-thumb {
+    background-color: #ffca28;
+  }
+  input[type=range]::-ms-thumb {
+    background-color: #ffca28;
+  }
+
+  /***** These are to edit the thumb and the text inside the thumb *****/
+  input[type=range] + .thumb {
+    background-color: #ffca28;
+  }
+  input[type=range] + .thumb.active .value {
+    color: #ffffff;
+  }
+</style>
 <body>
 <nav class="indigo lighten-3" role="navigation">
     <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Logo</a>
@@ -41,11 +61,17 @@
                 </div>
             </div>
         </form>
+        <form action="#" id="sliderContainer" hidden>
+            <p class="range-field">
+                <input class="amber lighten-1" type="range" id="imageSlider" min="10" max="100" oninput="scaleSourceImage(this);"/>
+            </p>
+        </form>
         <div class="row center">
-            <img class="responsive-img" src="#" id="sourceImage">
+            <img class="responsive-img" src="#" width="50%" id="sourceImage" hidden>
         </div>
         <div class="row center">
-            <button class="btn-large center-align amber lighten-1 waves-effect waves-light" type="button" name="action" onclick="alert('working on it');">
+            <button class="btn-large center-align amber lighten-1 waves-effect waves-light" type="button" name="action"
+                    onclick="alert('working on it');">
                 Go!
             </button>
         </div>

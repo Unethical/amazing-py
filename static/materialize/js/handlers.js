@@ -4,9 +4,11 @@ function ReadURL(input) {
 
         reader.onload = function (e) {
             $('#sourceImage')
-                .attr('src', e.target.result)
-                .width(150)
-                .height(200);
+                .attr('src', e.target.result);
+            $('#sourceImage')
+                .show();
+            $('#sliderContainer')
+                .show();
         };
 
         reader.readAsDataURL(input.files[0]);
@@ -14,7 +16,10 @@ function ReadURL(input) {
     }
 }
 
-function ScaleSourceImage(image, scalar)
+
+function scaleSourceImage()
 {
+
+    $('#sourceImage').width($('#imageSlider').val() + '%');
     //image.style.height
 }
