@@ -1,3 +1,5 @@
+var mMazeStart, mMazeEnd = null;
+
 function ReadURL(input) {
     if (input.files && input.files[0]) {
         var reader = new FileReader();
@@ -16,10 +18,20 @@ function ReadURL(input) {
     }
 }
 
-
-function scaleSourceImage()
-{
-
+function scaleSourceImage() {
     $('#sourceImage').width($('#imageSlider').val() + '%');
-    //image.style.height
 }
+
+
+
+$('#sourceImage').click(function(e)
+{
+    var offset_t = $(this).offset().top - $(window).scrollTop();
+    var offset_l = $(this).offset().left - $(window).scrollLeft();
+
+    var left = Math.round( (e.clientX - offset_l) );
+    var top = Math.round( (e.clientY - offset_t) );
+
+    alert("Left: " + left + " Top: " + top);
+
+});
